@@ -73,5 +73,20 @@ namespace VinylStore.Controllers
 
             return Ok(songs);
         }
+
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("DeleteSong/{id}")]
+        public IActionResult DeleteSong(string id)
+        {
+            var isDeleted = _songService.Delete(id);
+
+            if (!isDeleted)
+            {
+                return NotFound($"Song with ID {id} not found");
+            }
+
+            return Ok($"Song with ID {id} was successfully deleted");
+        }
     }
 }
