@@ -76,5 +76,21 @@ namespace VinylStoreDL.Repositories
                 return false;
             }
         }
+
+        public bool UpdateVinyl(Vinyl updatedVinyl)
+        {
+            try
+            {
+                var filter = Builders<Vinyl>.Filter.Eq(v => v.Id, updatedVinyl.Id);
+                var updateResult = _vinyls.ReplaceOne(filter, updatedVinyl);
+
+                return updateResult.ModifiedCount > 0; 
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error updating vinyl with ID {updatedVinyl.Id}: {e.Message}");
+                return false;
+            }
+        }
     }
 }

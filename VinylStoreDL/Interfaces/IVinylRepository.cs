@@ -12,5 +12,7 @@ namespace VinylStoreDL.Interfaces
 
         
         bool DeleteVinylById(string id);
+
+        bool UpdateVinyl(Vinyl updatedVinyl);
     }
 }

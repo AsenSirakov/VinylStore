@@ -102,5 +102,27 @@ namespace VinylStore.Controllers
 
             return Ok($"Vinyl with ID:{id} successfully deleted");
         }
+
+
+        [HttpPut("Update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateVinyl([FromBody] Vinyl updatedVinyl)
+        {
+            if (updatedVinyl == null || string.IsNullOrEmpty(updatedVinyl.Id))
+            {
+                return BadRequest("Invalid vinyl data");
+            }
+
+            var isUpdated = _vinylService.UpdateVinyl(updatedVinyl);
+
+            if (!isUpdated)
+            {
+                return NotFound($"Vinyl with ID {updatedVinyl.Id} not found");
+            }
+
+            return Ok($"Vinyl with ID {updatedVinyl.Id} was successfully updated");
+        }
     }
 }
