@@ -12,5 +12,8 @@ namespace VinylStoreDL.Interfaces
 
         
         IEnumerable<Song> GetAllSongs();
+
+        bool DeleteSongById(string id);
+
     }
 }

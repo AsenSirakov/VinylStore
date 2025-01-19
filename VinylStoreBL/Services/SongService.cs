@@ -29,5 +29,11 @@ namespace VinylStoreBL.Services
         {
             return _songRepository.GetAllSongs();
         }
+
+        public bool Delete(string id)
+        {
+            return _songRepository.DeleteSongById(id);
+        }
+
     }
 }

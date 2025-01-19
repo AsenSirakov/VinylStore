@@ -42,5 +42,12 @@ namespace VinylStoreDL.Repositories
         {
             return _songs.Find(song => true).ToList();
         }
+
+        public bool DeleteSongById(string id)
+        {
+            var result = _songs.DeleteOne(song => song.Id == id);
+            return result.DeletedCount > 0; // Return true if a song was deleted
+        }
+
     }
 }
