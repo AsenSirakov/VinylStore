@@ -88,5 +88,26 @@ namespace VinylStore.Controllers
 
             return Ok($"Song with ID {id} was successfully deleted");
         }
+
+        [HttpPut("UpdateSong")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateSong([FromBody] Song updatedSong)
+        {
+            if (updatedSong == null || string.IsNullOrEmpty(updatedSong.Id))
+            {
+                return BadRequest("Invalid song data");
+            }
+
+            var isUpdated = _songService.Update(updatedSong);
+
+            if (!isUpdated)
+            {
+                return NotFound($"Song with ID {updatedSong.Id} not found");
+            }
+
+            return Ok($"Song with ID {updatedSong.Id} was successfully updated");
+        }
     }
 }

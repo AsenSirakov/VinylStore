@@ -46,8 +46,23 @@ namespace VinylStoreDL.Repositories
         public bool DeleteSongById(string id)
         {
             var result = _songs.DeleteOne(song => song.Id == id);
-            return result.DeletedCount > 0; // Return true if a song was deleted
+            return result.DeletedCount > 0; 
         }
 
+        public bool UpdateSong(Song updatedSong)
+        {
+            try
+            {
+                var filter = Builders<Song>.Filter.Eq(s => s.Id, updatedSong.Id);
+                var updateResult = _songs.ReplaceOne(filter, updatedSong);
+
+                return updateResult.ModifiedCount > 0; 
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error updating song with ID {updatedSong.Id}: {e.Message}");
+                return false;
+            }
+        }
     }
 }
