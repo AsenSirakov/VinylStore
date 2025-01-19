@@ -42,5 +42,36 @@ namespace VinylStore.Controllers
             return Ok();
         }
 
+        // New endpoint: Get a single song by ID
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("GetSongById/{id}")]
+        public IActionResult GetSongById(string id)
+        {
+            var song = _songService.GetById(id);
+
+            if (song == null)
+            {
+                return NotFound($"Song with ID {id} not found");
+            }
+
+            return Ok(song);
+        }
+
+        // New endpoint: Get all songs
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet("GetAllSongs")]
+        public IActionResult GetAllSongs()
+        {
+            var songs = _songService.GetAll();
+
+            if (songs == null || !songs.Any())
+            {
+                return NotFound("No songs found");
+            }
+
+            return Ok(songs);
+        }
     }
 }
