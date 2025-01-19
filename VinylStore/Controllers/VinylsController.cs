@@ -15,9 +15,7 @@ namespace VinylStore.Controllers
         private readonly ILogger<VinylsController> _logger;
 
         public VinylsController(
-            IVinylService vinylService,
-            IMapper mapper,
-            ILogger<VinylsController> logger)
+            IVinylService vinylService, IMapper mapper, ILogger<VinylsController> logger)
         {
             _vinylService = vinylService;
             _mapper = mapper;
@@ -81,6 +79,28 @@ namespace VinylStore.Controllers
                 _logger.LogError(ex, $"Error adding vinyl");
                 return BadRequest(ex.Message);
             }
+        }
+
+        // New DELETE endpoint
+        [HttpDelete("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Id can't be null or empty");
+            }
+
+            var isDeleted = _vinylService.DeleteVinylById(id);
+
+            if (!isDeleted)
+            {
+                return NotFound($"Vinyl with ID:{id} not found");
+            }
+
+            return Ok($"Vinyl with ID:{id} successfully deleted");
         }
     }
 }
