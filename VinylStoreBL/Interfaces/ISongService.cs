@@ -14,5 +14,7 @@ namespace VinylStoreBL.Interfaces
 
         bool Delete(string id);
 
+        bool Update(Song updatedSong);
+
     }
 }

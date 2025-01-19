@@ -35,5 +35,16 @@ namespace VinylStoreBL.Services
             return _songRepository.DeleteSongById(id);
         }
 
+
+        public bool Update(Song updatedSong)
+        {
+            var existingSong = _songRepository.SongById(updatedSong.Id);
+            if (existingSong == null)
+            {
+                return false; 
+            }
+
+            return _songRepository.UpdateSong(updatedSong);
+        }
     }
 }
