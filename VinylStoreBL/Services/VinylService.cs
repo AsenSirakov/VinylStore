@@ -56,5 +56,18 @@ namespace VinylStoreBL.Services
             
             return _vinylRepository.DeleteVinylById(id);
         }
+
+        public bool UpdateVinyl(Vinyl updatedVinyl)
+        {
+           
+            var existingVinyl = _vinylRepository.GetVinylById(updatedVinyl.Id);
+            if (existingVinyl == null)
+            {
+                return false; 
+            }
+
+           
+            return _vinylRepository.UpdateVinyl(updatedVinyl);
+        }
     }
 }
