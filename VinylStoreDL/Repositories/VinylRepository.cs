@@ -61,13 +61,13 @@ namespace VinylStoreDL.Repositories
                 .FirstOrDefault();
         }
 
-        // New method for deleting a vinyl by ID
+        
         public bool DeleteVinylById(string id)
         {
             try
             {
                 var result = _vinyls.DeleteOne(vinyl => vinyl.Id == id);
-                return result.DeletedCount > 0; // Return true if deletion succeeded
+                return result.DeletedCount > 0; 
             }
             catch (Exception e)
             {
