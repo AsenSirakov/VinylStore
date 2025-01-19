@@ -51,7 +51,6 @@ namespace VinylStoreDL.Repositories
                 _logger.LogError(e,
                     $"Error adding vinyl {e.Message}-{e.StackTrace}");
             }
-
         }
 
         public Vinyl? GetVinylById(string id)
@@ -61,6 +60,21 @@ namespace VinylStoreDL.Repositories
             return _vinyls.Find(m => m.Id == id)
                 .FirstOrDefault();
         }
+
+        // New method for deleting a vinyl by ID
+        public bool DeleteVinylById(string id)
+        {
+            try
+            {
+                var result = _vinyls.DeleteOne(vinyl => vinyl.Id == id);
+                return result.DeletedCount > 0; // Return true if deletion succeeded
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    $"Error deleting vinyl with ID {id}: {e.Message}-{e.StackTrace}");
+                return false;
+            }
+        }
     }
 }
-

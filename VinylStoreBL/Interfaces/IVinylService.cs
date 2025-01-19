@@ -9,5 +9,8 @@ namespace VinylStoreBL.Interfaces
         void AddVinyl(Vinyl vinyl);
 
         Vinyl? GetVinylById(string id);
+
+        // New method for deleting a vinyl
+        bool DeleteVinylById(string id);
     }
 }

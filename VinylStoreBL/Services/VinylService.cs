@@ -42,5 +42,19 @@ namespace VinylStoreBL.Services
         {
             return _vinylRepository.GetVinylById(id);
         }
+
+        // New method for deleting a vinyl by ID
+        public bool DeleteVinylById(string id)
+        {
+            // Check if the vinyl exists
+            var vinyl = _vinylRepository.GetVinylById(id);
+            if (vinyl == null)
+            {
+                return false; // Vinyl not found
+            }
+
+            // Delete the vinyl
+            return _vinylRepository.DeleteVinylById(id);
+        }
     }
 }
