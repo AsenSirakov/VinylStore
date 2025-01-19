@@ -42,7 +42,7 @@ namespace VinylStore.Controllers
             return Ok();
         }
 
-        // New endpoint: Get a single song by ID
+        
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("GetSongById/{id}")]
@@ -58,7 +58,7 @@ namespace VinylStore.Controllers
             return Ok(song);
         }
 
-        // New endpoint: Get all songs
+        
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("GetAllSongs")]

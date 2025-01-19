@@ -18,13 +18,13 @@ namespace VinylStoreBL.Services
             _songRepository.AddSong(song);
         }
 
-        // New method to retrieve a song by its ID
+        
         public Song? GetById(string id)
         {
             return _songRepository.SongById(id);
         }
 
-        // New method to retrieve all songs
+        
         public IEnumerable<Song> GetAll()
         {
             return _songRepository.GetAllSongs();

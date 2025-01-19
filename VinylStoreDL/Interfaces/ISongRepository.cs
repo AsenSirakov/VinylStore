@@ -10,7 +10,7 @@ namespace VinylStoreDL.Interfaces
 
         Song? SongById(string id);
 
-        // New method to retrieve all songs
+        
         IEnumerable<Song> GetAllSongs();
     }
 }

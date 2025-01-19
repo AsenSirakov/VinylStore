@@ -37,7 +37,7 @@ namespace VinylStoreDL.Repositories
             return _songs.Find(m => m.Id == id).FirstOrDefault();
         }
 
-        // New method to retrieve all songs
+        
         public IEnumerable<Song> GetAllSongs()
         {
             return _songs.Find(song => true).ToList();
