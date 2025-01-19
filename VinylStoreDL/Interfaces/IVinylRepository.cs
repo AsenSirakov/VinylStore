@@ -10,7 +10,7 @@ namespace VinylStoreDL.Interfaces
 
         Vinyl GetVinylById(string id);
 
-        // New method for deleting a vinyl
+        
         bool DeleteVinylById(string id);
     }
 }

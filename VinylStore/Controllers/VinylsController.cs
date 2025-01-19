@@ -81,7 +81,7 @@ namespace VinylStore.Controllers
             }
         }
 
-        // New DELETE endpoint
+        
         [HttpDelete("Delete/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
