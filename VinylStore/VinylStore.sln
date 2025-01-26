@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylStore", "VinylStore.csproj", "{81A76781-6F44-43DF-9E14-8350C0A96879}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylStore", "VinylStore.csproj", "{81A76781-6F44-43DF-9E14-8350C0A96879}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylStoreBL", "..\VinylStoreBL\VinylStoreBL.csproj", "{7CD3A003-383F-4CC3-91A7-866484001CD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylStoreBL", "..\VinylStoreBL\VinylStoreBL.csproj", "{7CD3A003-383F-4CC3-91A7-866484001CD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylStoreDL", "..\VinylStoreDL\VinylStoreDL.csproj", "{6AE5EB94-8FAD-4FEB-BCA2-9B348F10FE20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylStoreDL", "..\VinylStoreDL\VinylStoreDL.csproj", "{6AE5EB94-8FAD-4FEB-BCA2-9B348F10FE20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylStore.Models", "..\VinylStore.Models\VinylStore.Models.csproj", "{46C3FFD8-099D-4DE7-8B4F-8EA2DE78D878}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VinylStore.Models", "..\VinylStore.Models\VinylStore.Models.csproj", "{46C3FFD8-099D-4DE7-8B4F-8EA2DE78D878}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VinylStore.Tests", "..\VinylStore.Tests\VinylStore.Tests.csproj", "{DC7A2E32-B029-4C5B-A12A-F1815DADEB86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{46C3FFD8-099D-4DE7-8B4F-8EA2DE78D878}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46C3FFD8-099D-4DE7-8B4F-8EA2DE78D878}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46C3FFD8-099D-4DE7-8B4F-8EA2DE78D878}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC7A2E32-B029-4C5B-A12A-F1815DADEB86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC7A2E32-B029-4C5B-A12A-F1815DADEB86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC7A2E32-B029-4C5B-A12A-F1815DADEB86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC7A2E32-B029-4C5B-A12A-F1815DADEB86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
