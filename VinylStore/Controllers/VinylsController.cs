@@ -27,10 +27,12 @@ namespace VinylStore.Controllers
         [HttpGet("GetAll")]
         public IActionResult Get()
         {
+            _logger.LogInformation("Fetching all vinyl records.");
             var result = _vinylService.GetAllVinyls();
 
             if (result == null || result.Count == 0)
             {
+                _logger.LogWarning("No vinyls found.");
                 return NotFound("No vinyls found");
             }
 
@@ -45,16 +47,20 @@ namespace VinylStore.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
+                _logger.LogWarning("Received empty ID for GetById request.");
                 return BadRequest("Id can't be null or empty");
             }
 
+            _logger.LogInformation("Fetching vinyl with ID: {VinylId}", id);
             var result = _vinylService.GetVinylById(id);
 
             if (result == null)
             {
+                _logger.LogWarning("Vinyl with ID:{VinylId} not found", id);
                 return NotFound($"Vinyl with ID:{id} not found");
             }
 
+            _logger.LogInformation("Successfully fetched vinyl with ID: {VinylId}", id);
             return Ok(result);
         }
 
@@ -67,16 +73,18 @@ namespace VinylStore.Controllers
 
                 if (vinylDto == null)
                 {
+                    _logger.LogWarning("Failed to convert vinyl to DTO.");
                     return BadRequest("Can't convert vinyl to vinyl DTO");
                 }
 
                 _vinylService.AddVinyl(vinylDto);
+                _logger.LogInformation("Vinyl with title {VinylTitle} added successfully.", vinylDto.Name);
 
-                return Ok();
+                return CreatedAtAction(nameof(GetById), new { id = vinylDto.Id }, vinylDto);
             }
             catch (System.Exception ex)
             {
-                _logger.LogError(ex, $"Error adding vinyl");
+                _logger.LogError(ex, "Error adding vinyl");
                 return BadRequest(ex.Message);
             }
         }

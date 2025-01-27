@@ -9,10 +9,12 @@ namespace VinylStore.Controllers
     public class SongController : ControllerBase
     {
         private readonly ISongService _songService;
+        private readonly ILogger<SongController> _logger;
 
-        public SongController(ISongService songService)
+        public SongController(ISongService songService, ILogger<SongController> logger)
         {
             _songService = songService;
+            _logger = logger;
         }
 
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -20,7 +22,11 @@ namespace VinylStore.Controllers
         [HttpPost("Add")]
         public IActionResult AddSong([FromBody] Song song)
         {
+            _logger.LogInformation("Attempting to add a song with title: {SongTitle}", song.Name);
+
             _songService.Add(song);
+
+            _logger.LogInformation("Song with title {SongTitle} was successfully added.", song.Name);
 
             return Ok();
         }
@@ -30,13 +36,17 @@ namespace VinylStore.Controllers
         [HttpGet("GetById/{id}")]
         public IActionResult GetSongById(string id)
         {
+            _logger.LogInformation("Fetching song with ID: {SongId}", id);
+
             var song = _songService.GetById(id);
 
             if (song == null)
             {
+                _logger.LogWarning("Song with ID {SongId} not found.", id);
                 return NotFound($"Song with ID {id} not found");
             }
 
+            _logger.LogInformation("Song with ID {SongId} was found.", id);
             return Ok(song);
         }
 
@@ -45,13 +55,17 @@ namespace VinylStore.Controllers
         [HttpGet("GetAll")]
         public IActionResult GetAllSongs()
         {
+            _logger.LogInformation("Fetching all songs.");
+
             var songs = _songService.GetAll();
 
             if (songs == null || !songs.Any())
             {
+                _logger.LogWarning("No songs found.");
                 return NotFound("No songs found");
             }
 
+            _logger.LogInformation("Found {SongCount} songs.", songs.Count());
             return Ok(songs);
         }
 
