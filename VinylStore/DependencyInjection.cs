@@ -1,4 +1,6 @@
-﻿using VinylStoreBL;
+﻿using FluentValidation;
+using VinylStore.Validators;
+using VinylStoreBL;
 
 namespace VinylStore
 {
@@ -8,6 +10,7 @@ namespace VinylStore
         {
             services.RegisterDataLayer();
             services.RegisterBusinessLayer();
+            services.AddValidatorsFromAssemblyContaining<AddVinylRequestValidator>();
         }
     }
 }

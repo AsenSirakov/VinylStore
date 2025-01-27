@@ -3,10 +3,15 @@ using VinylStore.Models.Requests;
 
 namespace VinylStore.Validators
 {
-    public class AddVinylRequestValidator : AbstractValidator<AddVinylRequest>
+    public class UpdateVinylRequestValidator : AbstractValidator<UpdateVinylRequest>
     {
-        public AddVinylRequestValidator()
+        public UpdateVinylRequestValidator()
         {
+            RuleFor(x => x.Id)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("Vinyl ID is required.");
+
             RuleFor(x => x.Name)
                 .NotNull()
                 .NotEmpty()
