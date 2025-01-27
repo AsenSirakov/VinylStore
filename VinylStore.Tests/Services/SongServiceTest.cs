@@ -1,132 +1,135 @@
 ﻿using Moq;
-using System.Collections.Generic;
-using System.Linq;
 using VinylStore.Models.DTO;
 using VinylStoreBL.Interfaces;
+using VinylStoreBL.Services;
+using VinylStoreDL.Interfaces;
 using Xunit;
 
-public class SongServiceInterfaceTests
+public class SongServiceTests
 {
-    private readonly Mock<ISongService> _songServiceMock;
+    private readonly Mock<ISongRepository> _songRepositoryMock;
+    private readonly SongService _songService;
 
-    public SongServiceInterfaceTests()
+    public SongServiceTests()
     {
-        _songServiceMock = new Mock<ISongService>();
+        _songRepositoryMock = new Mock<ISongRepository>();
+        _songService = new SongService(_songRepositoryMock.Object);
     }
 
     [Fact]
-    public void Add_ShouldInvokeAddMethod()
+    public void Add_ShouldCallAddSong_WhenValidSongIsProvided()
     {
-        // Arrange
+        
         var song = new Song { Id = "1", Name = "Song 1" };
 
-        // Act
-        _songServiceMock.Object.Add(song);
+        
+        _songService.Add(song);
 
-        // Assert
-        _songServiceMock.Verify(service => service.Add(song), Times.Once);
+        
+        _songRepositoryMock.Verify(repo => repo.AddSong(song), Times.Once);
     }
 
     [Fact]
     public void GetById_ShouldReturnSong_WhenIdExists()
     {
-        // Arrange
+        
         var song = new Song { Id = "1", Name = "Song 1" };
-        _songServiceMock.Setup(service => service.GetById("1")).Returns(song);
+        _songRepositoryMock.Setup(repo => repo.SongById("1")).Returns(song);
 
-        // Act
-        var result = _songServiceMock.Object.GetById("1");
+        
+        var result = _songService.GetById("1");
 
-        // Assert
+        
         Assert.NotNull(result);
-        Assert.Equal("Song 1", result.Name);
+        Assert.Equal(song, result);
     }
 
     [Fact]
     public void GetById_ShouldReturnNull_WhenIdDoesNotExist()
     {
-        // Arrange
-        _songServiceMock.Setup(service => service.GetById("999")).Returns((Song)null);
+        
+        _songRepositoryMock.Setup(repo => repo.SongById(It.IsAny<string>())).Returns((Song)null);
 
-        // Act
-        var result = _songServiceMock.Object.GetById("999");
+        
+        var result = _songService.GetById("999");
 
-        // Assert
+        
         Assert.Null(result);
     }
 
     [Fact]
     public void GetAll_ShouldReturnAllSongs()
     {
-        // Arrange
+        
         var songs = new List<Song>
         {
             new Song { Id = "1", Name = "Song 1" },
             new Song { Id = "2", Name = "Song 2" }
         };
-        _songServiceMock.Setup(service => service.GetAll()).Returns(songs);
+        _songRepositoryMock.Setup(repo => repo.GetAllSongs()).Returns(songs);
 
-        // Act
-        var result = _songServiceMock.Object.GetAll();
+        
+        var result = _songService.GetAll();
 
-        // Assert
+        
         Assert.NotNull(result);
-        Assert.Equal(2, result.Count());
+        Assert.Equal(songs.Count, result.Count());
+        Assert.Equal(songs, result);
     }
 
     [Fact]
-    public void Delete_ShouldReturnTrue_WhenSongExists()
+    public void Delete_ShouldReturnTrue_WhenSongIsDeleted()
     {
-        // Arrange
-        _songServiceMock.Setup(service => service.Delete("1")).Returns(true);
+        
+        _songRepositoryMock.Setup(repo => repo.DeleteSongById("1")).Returns(true);
 
-        // Act
-        var result = _songServiceMock.Object.Delete("1");
+        
+        var result = _songService.Delete("1");
 
-        // Assert
+        
         Assert.True(result);
-        _songServiceMock.Verify(service => service.Delete("1"), Times.Once);
     }
 
     [Fact]
     public void Delete_ShouldReturnFalse_WhenSongDoesNotExist()
     {
-        // Arrange
-        _songServiceMock.Setup(service => service.Delete("999")).Returns(false);
+        
+        _songRepositoryMock.Setup(repo => repo.DeleteSongById(It.IsAny<string>())).Returns(false);
 
-        // Act
-        var result = _songServiceMock.Object.Delete("999");
+        
+        var result = _songService.Delete("999");
 
-        // Assert
+        
         Assert.False(result);
     }
 
     [Fact]
     public void Update_ShouldReturnTrue_WhenSongIsUpdated()
     {
-        // Arrange
+        
         var updatedSong = new Song { Id = "1", Name = "Updated Song" };
-        _songServiceMock.Setup(service => service.Update(updatedSong)).Returns(true);
+        _songRepositoryMock.Setup(repo => repo.SongById("1")).Returns(new Song { Id = "1", Name = "Old Song" });
+        _songRepositoryMock.Setup(repo => repo.UpdateSong(updatedSong)).Returns(true);
 
-        // Act
-        var result = _songServiceMock.Object.Update(updatedSong);
+        
+        var result = _songService.Update(updatedSong);
 
-        // Assert
+        
         Assert.True(result);
-        _songServiceMock.Verify(service => service.Update(updatedSong), Times.Once);
+        _songRepositoryMock.Verify(repo => repo.UpdateSong(updatedSong), Times.Once);
     }
 
     [Fact]
     public void Update_ShouldReturnFalse_WhenSongDoesNotExist()
     {
-        // Arrange
+        
         var updatedSong = new Song { Id = "999", Name = "Nonexistent Song" };
-        _songServiceMock.Setup(service => service.Update(updatedSong)).Returns(false);
+        _songRepositoryMock.Setup(repo => repo.SongById("999")).Returns((Song)null);
 
-        // Act
-        var result = _songServiceMock.Object.Update(updatedSong);
+        
+        var result = _songService.Update(updatedSong);
 
-        // Assert
+        
         Assert.False(result);
     }
 }
