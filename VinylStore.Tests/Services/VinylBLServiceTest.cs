@@ -1,102 +1,120 @@
 ﻿using Moq;
-using System.Collections.Generic;
-using System.Linq;
 using VinylStore.Models.DTO;
 using VinylStore.Models.Views;
 using VinylStoreBL.Interfaces;
+using VinylStoreBL.Services;
 using VinylStoreDL.Interfaces;
 using Xunit;
 
-public class VinylBlServiceInterfaceTests
+public class VinylBlServiceTests
 {
     private readonly Mock<IVinylService> _vinylServiceMock;
     private readonly Mock<ISongRepository> _songRepositoryMock;
-    private readonly Mock<IVinylBlService> _vinylBlServiceMock;
+    private readonly VinylBlService _vinylBlService;
 
-    public VinylBlServiceInterfaceTests()
+    public VinylBlServiceTests()
     {
         _vinylServiceMock = new Mock<IVinylService>();
         _songRepositoryMock = new Mock<ISongRepository>();
-        _vinylBlServiceMock = new Mock<IVinylBlService>();
+
+        _vinylBlService = new VinylBlService(
+            _vinylServiceMock.Object,
+            _songRepositoryMock.Object
+        );
     }
 
     [Fact]
-    public void GetDetailedVinyls_ReturnsVinylsWithDetails()
+    public void GetDetailedVinyls_ShouldReturnDetailedVinyls_WhenDataExists()
     {
-        // Arrange
-        var vinylViews = new List<VinylView>
+        
+        var vinyls = new List<Vinyl>
         {
-            new VinylView { VinylId = "1", VinylName = "Vinyl 1" },
-            new VinylView { VinylId = "2", VinylName = "Vinyl 2" }
+            new Vinyl
+            {
+                Id = "1",
+                Name = "Classic Rock",
+                Songs = new List<Song>
+                {
+                    new Song { Id = "101" },
+                    new Song { Id = "102" }
+                }
+            }
         };
 
-        _vinylBlServiceMock.Setup(service => service.GetDetailedVinyls()).Returns(vinylViews);
-
-        // Act
-        var result = _vinylBlServiceMock.Object.GetDetailedVinyls();
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(2, result.Count);
-    }
-
-    [Fact]
-    public void GetVinylsBySongName_ReturnsMatchingVinyls()
-    {
-        // Arrange
-        var vinylViews = new List<VinylView>
+        var songs = new List<Song>
         {
-            new VinylView { VinylId = "1", VinylName = "Vinyl 1" }
+            new Song { Id = "101", Name = "Bohemian Rhapsody" },
+            new Song { Id = "102", Name = "Hotel California" }
         };
 
-        _vinylBlServiceMock.Setup(service => service.GetVinylsBySongName("Song 1")).Returns(vinylViews);
+        _vinylServiceMock
+            .Setup(service => service.GetAllVinyls())
+            .Returns(vinyls);
 
-        // Act
-        var result = _vinylBlServiceMock.Object.GetVinylsBySongName("Song 1");
+        _songRepositoryMock
+            .Setup(repo => repo.GetSongsByIds(It.IsAny<IEnumerable<string>>()))
+            .Returns(songs);
 
-        // Assert
-        Assert.NotNull(result);
-        Assert.Single(result);
-        Assert.Equal("Vinyl 1", result.First().VinylName);
-    }
+        
+        var result = _vinylBlService.GetDetailedVinyls();
 
-    [Fact]
-    public void GetVinylsBySongGenre_ReturnsMatchingVinyls()
-    {
-        // Arrange
-        var vinylViews = new List<VinylView>
-        {
-            new VinylView { VinylId = "1", VinylName = "Vinyl 1" }
-        };
-
-        _vinylBlServiceMock.Setup(service => service.GetVinylsBySongGenre("Rock")).Returns(vinylViews);
-
-        // Act
-        var result = _vinylBlServiceMock.Object.GetVinylsBySongGenre("Rock");
-
-        // Assert
+        
         Assert.NotNull(result);
         Assert.Single(result);
-        Assert.Equal("Vinyl 1", result.First().VinylName);
+        Assert.Equal("Classic Rock", result[0].VinylName);
+        Assert.Equal(2, result[0].Songs.Count());
+        Assert.Contains(result[0].Songs, s => s.Name == "Bohemian Rhapsody");
+        Assert.Contains(result[0].Songs, s => s.Name == "Hotel California");
     }
 
     [Fact]
-    public void GetVinylsBySongArtist_ReturnsMatchingVinyls()
+    public void GetDetailedVinyls_ShouldReturnEmptyList_WhenNoVinylsExist()
     {
-        // Arrange
-        var vinylViews = new List<VinylView>
+        
+        _vinylServiceMock
+            .Setup(service => service.GetAllVinyls())
+            .Returns(new List<Vinyl>());
+
+        
+        var result = _vinylBlService.GetDetailedVinyls();
+
+       
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetDetailedVinyls_ShouldReturnVinylsWithEmptySongs_WhenSongsNotFound()
+    {
+        
+        var vinyls = new List<Vinyl>
         {
-            new VinylView { VinylId = "1", VinylName = "Vinyl 1" }
+            new Vinyl
+            {
+                Id = "1",
+                Name = "Classic Rock",
+                Songs = new List<Song>
+                {
+                    new Song { Id = "101" },
+                    new Song { Id = "102" }
+                }
+            }
         };
 
-        _vinylBlServiceMock.Setup(service => service.GetVinylsBySongArtist("Artist 1")).Returns(vinylViews);
+        _vinylServiceMock
+            .Setup(service => service.GetAllVinyls())
+            .Returns(vinyls);
 
-        // Act
-        var result = _vinylBlServiceMock.Object.GetVinylsBySongArtist("Artist 1");
+        _songRepositoryMock
+            .Setup(repo => repo.GetSongsByIds(It.IsAny<IEnumerable<string>>()))
+            .Returns(new List<Song>()); 
 
-        // Assert
+        
+        var result = _vinylBlService.GetDetailedVinyls();
+
+        
         Assert.NotNull(result);
         Assert.Single(result);
-        Assert.Equal("Vinyl 1", result.First().VinylName);
+        Assert.Empty(result[0].Songs);
     }
 }
